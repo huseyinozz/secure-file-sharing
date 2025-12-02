@@ -31,3 +31,25 @@ def home():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    
+    
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSiONS']
+
+
+def generate_key():
+    return Fernet.generate_key().decode()
+
+
+# Dosya sifreleme
+def encrypt_file(file_path, key):
+    cipher = Fernet(key.encode())
+    with open(file_path, 'rb') as f:
+        encrypted_data = cipher.encrypt(f.read())
+    # Şifrelenmiş veriyi FARKLI BİR DOSYAYA yazıyoruz
+    encrypted_path = file_path + ".enc"
+    with open(encrypted_path, 'wb') as f:
+        f.write(encrypted_data)
+    os.remove(file_path)  # Orijinal dosyayı sil
+    return encrypted_path
+
