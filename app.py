@@ -64,10 +64,21 @@ def upload_file():
     
     if file.filename == '':
         return jsonify({"error": "Dosya seçilmedi"}), 400
+        
+    if len(filename) > 100:
+        return jsonify({"error": "Dosya adı çok uzun"}), 400
+
 
     # 2. Uzantı kontrolü ve Geçici Kayıt
     if file and allowed_file(file.filename):
         try:
+                    # secure_filename:
+            # - Dosya adındaki özel/türkçe karakterleri temizler
+            # - Boşlukları ve tehlikeli karakterleri (_  gibi) güvenli hale getirir
+            # - "../../etc/passwd" gibi path traversal saldırılarını engeller
+            # - Komut çalıştırmaya yönelik injection girişimlerini temizler
+            # Bu sayede dosya yalnızca izin verilen güvenli bir isimle kaydedilir.
+
             filename = secure_filename(file.filename)
             
             # 'uploads' klasörü yoksa oluştur
