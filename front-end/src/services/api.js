@@ -21,20 +21,20 @@ const mockUpload = () => {
 };
 
 const mockDownload = (filename, key) => {
-    return new Promise((resolve, reject) => {
-        console.log(`Mock Download: ${filename} dosyası indiriliyor...`);
-        setTimeout(() => {
-            // Basit bir doğrulama simülasyonu
-            if (!key || key.length < 5) {
-                reject({ status: 403, message: "Hatalı veya eksik anahtar!" });
-            } else {
-                // Başarılı ise sahte bir dosya (Blob) döndür
-                const mockContent = "Bu, şifresi çözülmüş gizli dosya içeriğidir.";
-                const blob = new Blob([mockContent], { type: 'text/plain' });
-                resolve(blob);
-            }
-        }, 1500);
-    });
+  return new Promise((resolve, reject) => {
+    console.log(`Mock Download: ${filename} dosyası indiriliyor...`);
+    setTimeout(() => {
+      // Basit bir doğrulama simülasyonu
+      if (!key || key.length < 5) {
+        reject({ status: 403, message: "Hatalı veya eksik anahtar!" });
+      } else {
+        // Başarılı ise sahte bir dosya (Blob) döndür
+        const mockContent = "Bu, şifresi çözülmüş gizli dosya içeriğidir.";
+        const blob = new Blob([mockContent], { type: "text/plain" });
+        resolve(blob);
+      }
+    }, 1500);
+  });
 };
 
 // --- GERÇEK SERVİS ---
@@ -48,20 +48,23 @@ const realUpload = async (formData) => {
 };
 
 const realDownload = async (filename, key) => {
-    // Backend'e POST isteği atıyoruz, cevap tipi 'blob' (dosya) olmalı
-    const response = await fetch(`${API_BASE_URL}/download`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filename, key })
-    });
+  // Backend'e POST isteği atıyoruz, cevap tipi 'blob' (dosya) olmalı
+  const response = await fetch(`${API_BASE_URL}/download`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ filename, key }),
+  });
 
-    if (!response.ok) {
-        // Hata durumunda JSON cevabını okumaya çalış
-        const errorData = await response.json().catch(() => ({}));
-        throw { status: response.status, message: errorData.error || "İndirme Hatası" };
-    }
-    
-    return response.blob(); // Dosya verisini döndür
+  if (!response.ok) {
+    // Hata durumunda JSON cevabını okumaya çalış
+    const errorData = await response.json().catch(() => ({}));
+    throw {
+      status: response.status,
+      message: errorData.error || "İndirme Hatası",
+    };
+  }
+
+  return response.blob(); // Dosya verisini döndür
 };
 
 export const uploadFile = USE_MOCK_DATA ? mockUpload : realUpload;
