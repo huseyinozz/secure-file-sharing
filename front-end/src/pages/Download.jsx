@@ -19,9 +19,26 @@ const Download = () => {
         try {
             const blob = await downloadFile(filename, key);
             console.log("Veri alındı (Blob):", blob);
-            // Blob işleme kısmı sonraki scrum'da yapılacak
+            // Blob'dan sanal bir URL oluşturuldu
+            const url = window.URL.createObjectURL(new Blob([blob]));
+            
+            // Geçici bir <a> etiketi oluşturuldu
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', filename); // İndirilecek dosya adı
+            
+            // <a> etiketine tıkla ve indir
+            document.body.appendChild(link);
+            link.click();
+            
+            // Temizlik
+            link.parentNode.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            
+            console.log("Dosya indirme tetiklendi.");
         } catch (err) {
             console.error(err);
+            alert("İndirme başarısız.");
         } finally {
             setLoading(false);
         }
