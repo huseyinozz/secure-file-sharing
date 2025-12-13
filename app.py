@@ -134,6 +134,11 @@ def upload_file():
 @app.route('/download/<filename>', methods=['GET'])
 def download_file(filename):
     try:
+    
+        provided_key = request.args.get("key")
+        if not provided_key:
+            return jsonify({"error": "Şifre anahtarı gerekli"}), 400
+
         # 1. Firestore'dan dosya bilgisini ve ANAHTARI çek
         doc_ref = db.collection('files').document(filename)
         doc = doc_ref.get()
@@ -143,6 +148,9 @@ def download_file(filename):
 
         file_data = doc.to_dict()
         key = file_data.get('encryption_key')
+        
+        if provided_key != stored_key:
+            return jsonify({"error": "Geçersiz şifre anahtarı"}), 403
         
         # 2. Storage'dan şifreli dosyayı indir
         if not os.path.exists('uploads'):
