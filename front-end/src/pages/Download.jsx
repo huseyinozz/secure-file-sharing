@@ -83,39 +83,9 @@ const Download = () => {
       <div className="form-card">
         <h2>Dosya İndir</h2>
 
-        {/* Başarı Mesajı */}
-        {success && (
-          <div
-            className="alert alert-success"
-            style={{
-              color: "green",
-              padding: "10px",
-              border: "1px solid green",
-              borderRadius: "5px",
-              marginBottom: "10px",
-            }}
-          >
-            {success}
-          </div>
-        )}
+        {success && <div className="alert alert-success">{success}</div>}
+        {error && <div className="alert alert-error">{error}</div>}
 
-        {/* Hata Mesajı */}
-        {error && (
-          <div
-            className="alert alert-error"
-            style={{
-              color: "red",
-              padding: "10px",
-              border: "1px solid red",
-              borderRadius: "5px",
-              marginBottom: "10px",
-            }}
-          >
-            {error}
-          </div>
-        )}
-
-        {/* Dosya Adı Girişi */}
         <div className="input-group">
           <label>Dosya Adı</label>
           <input
@@ -128,57 +98,42 @@ const Download = () => {
           />
         </div>
 
-        {/* Şifre Girişi */}
         <div className="input-group">
           <label>Şifre Anahtarı</label>
           <div style={{ display: "flex", gap: "10px" }}>
             <input
               type="text"
-              placeholder="Size verilen anahtarı yapıştırın"
+              placeholder="Anahtarı buraya yapıştırın"
               className="text-input"
               value={key}
               onChange={(e) => setKey(e.target.value)}
               disabled={loading}
-              style={{ flexGrow: 1 }}
             />
             <button
               className="btn btn-secondary"
               onClick={pasteKey}
+              type="button"
               disabled={loading}
-              type="button" // Form submit tetiklemesin diye
+              title="Yapıştır"
             >
               Yapıştır
             </button>
           </div>
         </div>
 
-        {/* Butonlar Grubu */}
-        <div
-          className="button-group"
-          style={{ marginTop: "20px", display: "flex", gap: "10px" }}
-        >
-          {/* İndirme Butonu */}
+        <div className="button-group">
           <button
             className="btn btn-primary"
             onClick={handleDownload}
-            // Validasyon: Alanlar boşsa veya yükleniyorsa basılamaz
             disabled={loading || !filename || !key}
-            style={{
-              flex: 1,
-              padding: "10px",
-              cursor: loading || !filename || !key ? "not-allowed" : "pointer",
-              opacity: loading || !filename || !key ? 0.6 : 1,
-            }}
           >
-            {loading ? "İndiriliyor..." : "Dosyayı İndir"}
+            {loading ? "İndiriliyor..." : "İndir"}
           </button>
 
-          {/* Temizleme Butonu */}
           <button
             className="btn btn-secondary"
             onClick={handleClear}
             disabled={loading}
-            style={{ padding: "10px", cursor: "pointer" }}
           >
             Temizle
           </button>

@@ -53,68 +53,45 @@ const Upload = () => {
   };
 
   return (
-    <div className="container">
-      <h2>Dosya Yükle ve Şifrele</h2>
-
-      <div className="upload-form">
-        <input
-          type="file"
-          className="file-input"
-          onChange={handleFileChange}
-          disabled={loading}
-        />
-        <br />
+    <div className="page-container">
+      {" "}
+      {/* Container sınıfı değişti */}
+      <div className="form-card">
+        {" "}
+        {/* Kart yapısı eklendi */}
+        <h2>Dosya Yükle ve Şifrele</h2>
+        {/* Hata Mesajı */}
+        {error && <div className="alert alert-error">{error}</div>}
+        <div className="input-group">
+          <label>Dosya Seçin</label>
+          <input
+            type="file"
+            className="file-input"
+            onChange={handleFileChange}
+            disabled={loading}
+          />
+        </div>
+        {/* Yükle Butonu */}
         <button
-          className="upload-btn"
+          className="btn btn-primary" /* Sınıf eklendi */
           onClick={handleUpload}
           disabled={loading || !file}
-          style={{
-            marginTop: "15px",
-            width: "100%",
-            opacity: loading || !file ? 0.5 : 1,
-            cursor: loading || !file ? "not-allowed" : "pointer", // İmleç yasak işareti olsun
-            transition: "all 0.3s ease", // Geçiş animasyonu
-          }}
+          style={{ width: "100%" }} /* Tek buton olduğu için tam genişlik */
         >
           {loading ? "Yükleniyor..." : "Yükle"}
         </button>
-      </div>
-
-      {/* Error Mesage */}
-      {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
-
-      {key && (
-        <div
-          className="result-area"
-          style={{
-            marginTop: "20px",
-            padding: "15px",
-            border: "1px solid #ddd",
-            borderRadius: "5px",
-          }}
-        >
-          <h3>İşlem Sonucu</h3>
-          <p>Dosyanız şifrelendi! Erişim anahtarınız:</p>
-          <div
-            className="key-display"
-            style={{
-              background: "#e8f0fe",
-              padding: "10px",
-              fontFamily: "monospace",
-              fontSize: "1.2em",
-              wordBreak: "break-all",
-            }}
-          >
-            {key}
+        {/* Sonuç Alanı */}
+        {key && (
+          <div className="result-area">
+            <h3>Dosya Şifrelendi!</h3>
+            <p>Erişim anahtarınız:</p>
+            <div className="key-display">{key}</div>
+            <button className="btn btn-success" onClick={copyToClipboard}>
+              Anahtarı Kopyala
+            </button>
           </div>
-          <button
-            style={{ marginTop: "10px", backgroundColor: "#2ecc71" }}
-            onClick={copyToClipboard}
-          >
-            Anahtarı Kopyala
-          </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
