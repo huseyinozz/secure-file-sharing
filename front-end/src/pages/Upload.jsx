@@ -68,6 +68,13 @@ const Upload = () => {
           className="upload-btn"
           onClick={handleUpload}
           disabled={loading || !file}
+          style={{
+            marginTop: "15px",
+            width: "100%",
+            opacity: loading || !file ? 0.5 : 1,
+            cursor: loading || !file ? "not-allowed" : "pointer", // İmleç yasak işareti olsun
+            transition: "all 0.3s ease", // Geçiş animasyonu
+          }}
         >
           {loading ? "Yükleniyor..." : "Yükle"}
         </button>
