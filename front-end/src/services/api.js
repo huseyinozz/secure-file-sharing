@@ -16,7 +16,7 @@ const mockUpload = () => {
           "TEST-KEY-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
         message: "Dosya başarıyla şifrelendi (Simülasyon)",
       });
-    }, 1500); // 1.5 saniye bekleme efekti
+    }, 2000);
   });
 };
 
@@ -33,7 +33,7 @@ const mockDownload = (filename, key) => {
         const blob = new Blob([mockContent], { type: "text/plain" });
         resolve(blob);
       }
-    }, 1500);
+    }, 2000);
   });
 };
 
