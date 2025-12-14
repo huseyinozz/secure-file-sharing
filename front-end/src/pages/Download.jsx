@@ -42,7 +42,6 @@ const Download = () => {
     }
 
     setLoading(true);
-    console.log("İndirme isteği başlatılıyor...");
 
     try {
       const blob = await downloadFile(filename, key);
