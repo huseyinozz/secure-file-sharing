@@ -27,4 +27,5 @@ __pycache__/
 *.pyc
 venv/
 .env
+backend/serviceAccountKey.json
 
