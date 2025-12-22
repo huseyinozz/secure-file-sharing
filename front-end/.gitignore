@@ -22,10 +22,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-__pycache__/
-*.pyc
-venv/
-.env
-backend/serviceAccountKey.json
-serviceAccountKey.json

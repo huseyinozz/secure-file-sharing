@@ -1,8 +1,20 @@
-// src/services/api.js
-// Sprint 2: Backend simülasyonu ve bağlantı ayarları
-
 const API_BASE_URL = "http://127.0.0.1:5000";
-const USE_MOCK_DATA = true; // Backend hazır olana kadar TRUE kalsın
+/**
+ * --------------------------------------------------------------------------
+ * [GELİŞTİRİCİ NOTU - BACKEND ENTEGRASYONU]
+ * --------------------------------------------------------------------------
+ * Varsayılan Durum: TRUE (Mock Data)
+ * * Neden?
+ * Her geliştiricinin local ortamında farklı Firebase hesapları ve Config dosyaları
+ * bulunduğu için, proje pull edildiğinde doğrudan çalışabilmesi adına
+ * varsayılan olarak 'Mock Data' (Sahte Veri) ile çalışmaktadır.
+ * * Gerçek Backend İle Test Etmek İçin Adımlar:
+ * 1. Aşağıdaki 'USE_MOCK_DATA' değişkenini 'false' yapın.
+ * 2. Backend sunucusunun (app.py) 5000 portunda çalıştığından emin olun.
+ * 3. Backend tarafında 'flask-cors' kütüphanesinin kurulu olduğunu doğrulayın.
+ * 4. 'config.py' içinde geçerli bir Firebase Bucket adresi tanımlı olmalıdır.
+ */
+const USE_MOCK_DATA = false; // Backend hazır olana kadar TRUE kalsın
 
 // --- MOCK (SAHTE) SERVİS ---
 const mockUpload = () => {
@@ -43,16 +55,21 @@ const realUpload = async (formData) => {
     method: "POST",
     body: formData,
   });
-  if (!response.ok) throw new Error("Backend Bağlantı Hatası");
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || "Backend Yükleme Hatası");
+  }
   return response.json();
 };
 
 const realDownload = async (filename, key) => {
   // Backend'e POST isteği atıyoruz, cevap tipi 'blob' (dosya) olmalı
-  const response = await fetch(`${API_BASE_URL}/download`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ filename, key }),
+  const url = `${API_BASE_URL}/download/${filename}?key=${encodeURIComponent(
+    key
+  )}`;
+
+  const response = await fetch(url, {
+    method: "GET", // Backend GET istiyor, POST değil. Burası düzeltildi.
   });
 
   if (!response.ok) {
@@ -69,3 +86,4 @@ const realDownload = async (filename, key) => {
 
 export const uploadFile = USE_MOCK_DATA ? mockUpload : realUpload;
 export const downloadFile = USE_MOCK_DATA ? mockDownload : realDownload;
+export default API_BASE_URL;

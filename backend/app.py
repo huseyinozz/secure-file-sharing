@@ -1,14 +1,18 @@
 import os
 import datetime
 from flask import Flask, jsonify, request, send_file
+from flask_cors import CORS # <--- 1. YENİ EKLENDİ
 from werkzeug.utils import secure_filename
 from cryptography.fernet import Fernet
 import firebase_admin
-from firebase_admin import credentials, storage, firestore # Firestore eklendi
+from firebase_admin import credentials, storage, firestore
 from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
+
+# CORS EKLENDİ (React'in backend'e erişmesine izin verir)
+CORS(app)
 
 # --- FIREBASE BAĞLANTISI ---
 cred_path = os.path.join(os.path.dirname(__file__), '../serviceAccountKey.json')
@@ -123,7 +127,8 @@ def upload_file():
             return jsonify({
                 "message": "Dosya yüklendi, şifrelendi ve veritabanına kaydedildi!",
                 "filename": filename,
-                "firestore_status": "saved" 
+                "firestore_status": "saved",
+                "key": key
             }), 200
 
         except Exception as e:
@@ -149,7 +154,7 @@ def download_file(filename):
         file_data = doc.to_dict()
         key = file_data.get('encryption_key')
         
-        if provided_key != stored_key:
+        if provided_key != key:
             return jsonify({"error": "Geçersiz şifre anahtarı"}), 403
         
         # 2. Storage'dan şifreli dosyayı indir
