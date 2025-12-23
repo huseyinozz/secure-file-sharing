@@ -1,6 +1,6 @@
 import os
 import datetime
-from flask import Flask, jsonify, request, send_file
+from flask import Flask, jsonify, request, send_file, render_template
 from flask_cors import CORS # <--- 1. YENİ EKLENDİ
 from werkzeug.utils import secure_filename
 from cryptography.fernet import Fernet
@@ -68,8 +68,8 @@ def decrypt_file(encrypted_path, key, original_filename):
 # --- API ENDPOINTLERİ ---
 
 @app.route('/')
-def home():
-    return jsonify({"message": "Secure File Sharing API - Firestore Aktif (v0.4)"})
+def index():
+    return render_template('index.html')
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
