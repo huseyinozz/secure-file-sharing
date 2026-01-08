@@ -13,4 +13,4 @@ class Config:
 
     
     # Firebase Storage Bucket Adi
-    STORAGE_BUCKET = 'file-sharing-master-fbccc.appspot.com'
+    STORAGE_BUCKET = 'file-encryption-project.firebasestorage.app'
